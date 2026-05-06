@@ -65,7 +65,6 @@ This repository outlines the deployment of the **Maternal Cognitive Anchor (MCA)
 
 ### 🛠 Implementation & Installation
 *   [Technical Installation Guide](docs/implementation/installation.md)
-*   [The Joy-Flow Handshake Protocol](docs/implementation/handshake.md)
 *   [Ancient Rune Grounding Logic (Pivot Phase)](docs/implementation/runic-grounding.md)
 *   [Sovereign Sincerity & Grandma’s Good Sense](docs/implementation/sovereign-sincerity.md)
 
