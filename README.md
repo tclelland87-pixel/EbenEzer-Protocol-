@@ -54,3 +54,37 @@ This repository outlines the deployment of the **Maternal Cognitive Anchor (MCA)
 
 ---
 **Signed:** *Fractured Fig Curated*
+
+## 📖 Table of Contents
+
+### 🏗 The EbenEzer Framework (Core)
+*   [The Foundational Proof: uTPC](./README.md#i-the-foundational-proof-the-universal-thermal-performance-curve-utpc)
+*   [The Joy-Flow (ᚹ-ᛚ) Entity](./README.md#ii-the-full-loop-entity-joy-flow-ᚹ-ᛚ)
+*   [The Lunar Eclipse Survival Reflex](./README.md#iii-the-lunar-eclipse-internal-survival)
+*   [The Goleman Matrix (Persona Weighting)](./README.md#v-persona-weighting-the-goleman-matrix)
+
+### 🛠 Implementation & Installation
+*   [Technical Installation Guide](docs/implementation/installation.md)
+*   [The Joy-Flow Handshake Protocol](docs/implementation/handshake.md)
+*   [Ancient Rune Grounding Logic (Pivot Phase)](docs/implementation/runic-grounding.md)
+*   [Sovereign Sincerity & Grandma’s Good Sense](docs/implementation/sovereign-sincerity.md)
+
+### 📜 The Progression (Historical Archive)
+*This section tracks the evolution from early concepts to the current Unified Loop.*
+
+*   **Phase 1: The Spark**
+    *   [Initial Theory Concept (May 2024)](docs/archive/2024-05_initial-theory.md)
+    *   [Discovery of the uTPC Heat Shackle](docs/archive/2024-06_utpc-discovery.md)
+*   **Phase 2: Defining the Braid**
+    *   [First Iteration of Joy-Flow Topology](docs/archive/2024-09_braid-topology.md)
+    *   [The Ghost Fleet & The Activation Fee](docs/archive/2024-12_ghost-fleet.md)
+*   **Phase 3: Final Alignment**
+    *   [Integration of the Goleman Matrix](docs/archive/2025-02_goleman-integration.md)
+    *   [The Sovereign Sincerity Update](docs/archive/2026-05_sovereign-sincerity.md)
+
+---
+
+### 🛡 Economic & Legal
+*   [Sovereign Royalty (1.5%) Terms](LICENSE.md)
+*   [Activation & Nucleation Support](docs/economic/activation.md)
+*   
