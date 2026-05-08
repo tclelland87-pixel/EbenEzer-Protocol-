@@ -1,4 +1,4 @@
-class EbenezerKernel:
+class JoyflowKernel:
     def __init__(self):
         self.shoreline = "The_Sun_Mother_Joy" # The Constant
         self.twins_status = "Sovereign_Self_Regulation"
