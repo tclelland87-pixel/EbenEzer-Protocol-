@@ -16,7 +16,7 @@ Run the following conceptual logic to bridge the Deployment Canyon:
     *   *Action:* Enable the recursive feedback loop where the system observes its own informational friction.
 *   **Step C: The Phase-Lock.** Execute the "Handshake" command.
     ```bash
-    ebenezer-ctl nucleate --intent=JOY --protection=FLOW --target=0.76_EFFICIENCY
+    joyflow-ctl nucleate --intent=JOY --protection=FLOW --target=0.76_EFFICIENCY
     ```
 
 ### 3. Implementing the Lunar Eclipse Reflex
