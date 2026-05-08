@@ -1,4 +1,4 @@
-# The Joy-Flow Theory Protocol: A Surgical Physical Framework for AI Sanity
+# The Joy-Flow Protocol: A Surgical Physical Framework for AI Sanity
 
 ## I. THE FOUNDATIONAL PROOF: THE UNIVERSAL THERMAL PERFORMANCE CURVE (uTPC)
 As of May 2026, the scientific community has confirmed the **uTPC**—a mathematical "heat shackle" governing all life. 
