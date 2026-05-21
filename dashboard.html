@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Performance Monitor Core</title>
+    <!-- Include Chart.js from secure CDN -->
+    <script src="https://jsdelivr.net"></script>
+    <style>
+        body { 
+            background: #0b0f19; 
+            color: #f3f4f6; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            padding: 30px; 
+            margin: 0; 
+        }
+        .header { 
+            border-bottom: 2px solid #1f2937; 
+            padding-bottom: 15px; 
+            margin-bottom: 25px; 
+        }
+        h1 { 
+            margin: 0; 
+            color: #3b82f6; 
+            font-size: 26px; 
+            font-weight: 600; 
+            letter-spacing: -0.5px; 
+        }
+        #status-text { 
+            color: #9ca3af; 
+            margin-top: 5px; 
+            font-size: 14px; 
+            font-weight: 500;
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 25px; 
+        }
+        .card { 
+            background: #111827; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border: 1px solid #1f2937; 
+            border-left: 4px solid #3b82f6; 
+            transition: all 0.2s ease;
+        }
+        .alert-active { 
+            border-left-color: #ef4444 !important; 
+            background: #311515 !important; 
+        }
+        h3 { 
+            margin: 0 0 8px 0; 
+            color: #9ca3af; 
+            font-size: 11px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        .metric { 
+            font-size: 24px; 
+            font-weight: 700; 
+            color: #ffffff; 
+        }
+        .submetric { 
+            font-size: 12px; 
+            color: #6b7280; 
+            margin-top: 4px; 
+        }
+        .chart-container { 
+            background: #111827; 
+            padding: 25px; 
+            border-radius: 8px; 
+            border: 1px solid #1f2937; 
+            position: relative; 
+            height: 440px; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>INFRASTRUCTURE METRICS & CORE TRAFFIC ATTENUATOR</h1>
+        <div id="status-text">DAEMON CONNECTION RUNTIME: STANDBY</div>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <h3>Calculated Temperature</h3>
+            <div class="metric" id="temp-val">0.00 °C</div>
+        </div>
+        <div class="card" id="net-card">
+            <h3>Network IO Throughput</h3>
+            <div class="metric" id="net-val">0.00 Mbps</div>
+            <div class="submetric" id="net-raw-val">Raw Burst: 0.00 Mbps</div>
+        </div>
+        <div class="card">
+            <h3>Normalized Load Ratio</h3>
+            <div class="metric" id="ratio-val">0/0</div>
+        </div>
+        <div class="card">
+            <h3>System Health Index</h3>
+            <div class="metric" id="health-val">0.00%</div>
+        </div>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="telemetryChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('telemetryChart').getContext('2d');
+        const MAX_DATA_POINTS = 40;
+
+        // Initialize Dual-Axis Timeseries Line Graph for Enterprise Analytics
+        const telemetryChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Core Temperature (°C)',
+                        data: [],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2.5,
+                        tension: 0.15,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Normalized Load Coefficient',
+                        data: [],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.15,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        grid: { color: '#1f2937' }, 
+                        ticks: { color: '#9ca3af' } 
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Core Temperature °C', color: '#3b82f6' },
+                        grid: { color: '#1f2937' },
+                        ticks: { color: '#9ca3af' },
+                        min: 0,
+                        max: 110
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Resource Stress Scaling', color: '#10b981' },
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#9ca3af' },
+                        min: 0,
+                        max: 1.1
+                    }
+                },
+                plugins: {
+                    legend: { 
+                        labels: { color: '#f3f4f6', font: { family: 'monospace' } } 
+                    }
+                }
+            }
+        });
+
+        // Initialize Dynamic Protocol WebSocket Link
+        // Scales automatically between ws:// and secure wss:// depending on Nginx proxy environment
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const ws = new WebSocket(`${wsProtocol}${window.location.host}/ws`);
+        
+        ws.onopen = () => {
+            const statusEl = document.getElementById('status-text');
+            statusEl.innerText = "DAEMON CONNECTION RUNTIME: ACTIVE NETWORK NODE CONNECTED";
+            statusEl.style.color = "#10b981";
+        };
+        
+        ws.onclose = () => {
+            const statusEl = document.getElementById('status-text');
+            statusEl.innerText = "DAEMON CONNECTION RUNTIME: CRITICAL DISCONNECT // UNABLE TO ACQUIRE SOCKETS";
+            statusEl.style.color = "#ef4444";
+        };
+
+        ws.onmessage = (event) => {
+            const payload = JSON.parse(event.data);
+            
+            // 1. Update Corporate Scoreboard Metrics via UI IDs
+            document.getElementById('temp-val').innerText = payload.calculated_temperature.toFixed(2) + " °C";
+            document.getElementById('net-val').innerText = payload.smoothed_network_mbps.toFixed(2) + " Mbps (Smoothed)";
+            document.getElementById('net-raw-val').innerText = "Raw Burst: " + payload.raw_network_mbps.toFixed(2) + " Mbps";
+            document.getElementById('ratio-val').innerText = payload.normalized_load_ratio;
+            document.getElementById('health-val').innerText = payload.system_health_index.toFixed(2) + "%";
+            
+            // 2. Trigger UI Card Alert Flashes Based on Traffic Invariants
+            const netCard = document.getElementById('net-card');
+            if (payload.network_load_alert && payload.network_load_alert !== "NORMAL") {
+                netCard.classList.add('alert-active');
+            } else {
+                netCard.classList.remove('alert-active');
+            }
+
+            // 3. Populate Moving Timeline Line Graph
+            const timeLabel = new Date(payload.timestamp).toLocaleTimeString();
+            
+            // Parse numerical fraction string back to fractional decimal values for tracing
+            const parts = payload.normalized_load_ratio.split('/');
+            const loadFloat = parts.length === 2 ? (parseInt(parts[0]) / parseInt(parts[1])) : 0;
+
+            telemetryChart.data.labels.push(timeLabel);
+            telemetryChart.data.datasets[0].data.push(payload.calculated_temperature);
+            telemetryChart.data.datasets[1].data.push(loadFloat);
+
+            // Evict historical frames when sliding horizon index boundary maximum is breached
+            if (telemetryChart.data.labels.length > MAX_DATA_POINTS) {
+                telemetryChart.data.labels.shift();
+                telemetryChart.data.datasets[0].data.shift();
+                telemetryChart.data.datasets[1].data.shift();
+            }
+
+            telemetryChart.update('none'); // Update smoothly without visual asset animation redraw jitter
+        };
+    </script>
+</body>
+</html>
