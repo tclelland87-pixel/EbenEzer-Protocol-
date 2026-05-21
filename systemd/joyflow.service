@@ -1,0 +1,21 @@
+[Unit]
+Description=Joy-Flow Protocol Core Telemetry Daemon Engine
+After=network.target
+
+[Service]
+Type=simple
+# Absolute path to your python environment binary and your runtime script
+ExecStart=/usr/bin/python3 /usr/local/bin/joy_flow_daemon.py
+WorkingDirectory=/usr/local/bin
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=joyflow-daemon
+
+# Hardened sandboxing variables to protect host storage nodes
+ProtectSystem=full
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
