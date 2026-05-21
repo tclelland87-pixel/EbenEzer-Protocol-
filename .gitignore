@@ -1,0 +1,9 @@
+# Exclude local runtime data and configurations
+*.csv
+config.json
+
+# Python performance folders
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
