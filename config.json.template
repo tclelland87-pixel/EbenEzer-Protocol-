@@ -1,0 +1,17 @@
+{
+  "networking": {
+    "host": "0.0.0.0",
+    "port": 8765,
+    "prometheus_port": 8000
+  },
+  "metrics": {
+    "thermal_max_ceiling_celsius": 100.0,
+    "safety_limit_ratio_percentage": 76.0,
+    "net_saturation_threshold_mb": 50.0,
+    "net_max_capacity_mb": 100.0,
+    "ema_smoothing_span_seconds": 5
+  },
+  "storage": {
+    "log_path": "/var/log/joyflow/system_telemetry_matrix.csv"
+  }
+}
