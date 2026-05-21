@@ -1,0 +1,61 @@
+name: Joy-Flow Protocol CI Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository Code
+      uses: actions/checkout@v4
+
+    - name: Set Up Python Runtime Environment
+      uses: actions/setup-python@v5
+      with:
+        python-node-version: '3.11'
+
+    - name: Install System Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 psutil websockets prometheus-client
+
+    - name: Lint Code Base Syntax (Flake8)
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings.
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Validate Configuration Template JSON Structure
+      run: |
+        python -c "
+        import json
+        with open('config.json.template', 'r') as f:
+            data = json.load(f)
+        print('SUCCESS: config.json.template contains valid structural JSON formatting.')
+        "
+
+    - name: Execute Component Integration Test (Mock Initialization Check)
+      run: |
+        python -c "
+        import os, shutil
+        from joy_flow_daemon import EnterpriseTelemetryDaemon
+        
+        # Stand up mock configuration profile for execution test pipeline
+        shutil.copyfile('config.json.template', 'config.json')
+        
+        try:
+            daemon = EnterpriseTelemetryDaemon(config_path='config.json')
+            assert daemon.thermal_max_ceiling == 100, 'Thermal extraction constraint mismatch'
+            assert daemon.safety_limit_ratio == 76/100, 'Safety limit matrix ratio mismatch'
+            print('SUCCESS: Daemon initialized, parsed JSON limits, and converted rational fractions cleanly.')
+        except Exception as e:
+            print(f'FAILURE: Engine initialization validation sequence dropped: {e}')
+            exit(1)
+        "
+        
