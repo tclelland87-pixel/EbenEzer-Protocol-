@@ -92,7 +92,25 @@ This fraction creates a self-balancing load metric. Heavy processing strain incr
 
 To safeguard host infrastructure, the daemon executes a dual-layered boundary validation check on every step:
 
-[Live Metrics Acquisition]│▼[Apply Exact Fraction EMA Filter]│▼[Compute Temperature Coordinate]│┌──────────┴──────────┐│                     ▼│         Is Temp >= Max Ceiling? (e.g. 76°C)│                     ││          No         ├──────────────────────────────┐ Yes│                     │                              │▼                     ▼                              ▼[Status: HEALTH_OPTIMAL]              [STATUS: CRITICAL_FAILSAFE_TRIGGERED][Maintain Active Processing]           [Force Temp Drop to 22°C Baseline][Override System Health Index to 100%]
+[Live Metrics Acquisition]
+│
+▼
+[Apply Exact Fraction EMA Filter]
+│
+▼
+[Compute Temperature Coordinate]
+│
+▼
+Is Temp >= Max Ceiling? (e.g. 76°C)
+┌──────────┴───────────────┐
+│                               │
+No                             Yes
+│                               │            ▼                               │
+[Status: HEALTH_OPTIMAL] [STATUS: CRITICAL_FAILSAFE_TRIGGERED]
+│                               │            ▼                              ▼            [Maintain Active Processing] [Force Temp Drop to 22°C Baseline]
+│
+▼
+[Override System Health Index to 100%]
 
 If the calculated temperature meets or exceeds the safety maximum threshold (76°C by default), the circuit breaker trips. The daemon instantly drops the reported system temperature to a safe 22°C baseline and overrides the system health index to 100%. This protection layer isolates the host node and prevents rolling system crashes across server groups.
 
