@@ -1,4 +1,4 @@
-# Joy-Flow Protocol v1.6 (Enterprise Core Edition)
+# Joy-Flow Protocol v1.7 (Enterprise Core Edition)
 
 An unshakeable, drift-free system telemetry daemon and streaming visualization layer designed to govern data processing nodes navigating high-entropy, high-demand environments. The protocol maps real-world system resource strains and network capacity deltas into exact rational fraction algebra (\(\mathbb{Q}\)) to entirely eliminate IEEE-754 floating-point precision drift.
 
